@@ -1,8 +1,8 @@
 """Educational heart disease risk demo built with Streamlit and scikit-learn."""
 
 import streamlit as st
-
-from heart_model import get_model
+import pandas as pd
+from heart_model import FEATURES, get_model
 
 
 st.set_page_config(page_title="Heart Health Risk Demo", page_icon="🫀", layout="centered")
@@ -44,7 +44,8 @@ if submitted:
     values = [[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]]
     try:
         model = get_model()
-        probability = float(model.predict_proba(values)[0, 1])
+        input_data = pd.DataFrame(values, columns=FEATURES)
+        probability = float(model.predict_proba(input_data)[0, 1])
         st.metric("Model score for the positive class", f"{probability:.0%}")
         st.info("This score is not a diagnosis or a validated personal risk estimate. Please consult a clinician for interpretation.")
     except Exception as exc:
